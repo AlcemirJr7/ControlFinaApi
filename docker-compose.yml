@@ -1,0 +1,31 @@
+version: '3.4'
+
+volumes:  
+  controlfinadb-vol:
+
+services:
+
+  controlfinaapi:
+    image: ${DOCKER_REGISTRY-}controlfinaapi
+    build:
+      context: ControlFinaApi
+      dockerfile: Dockerfile
+    ports:
+      - 8077:8077
+    depends_on:
+      - controlfina-db
+  
+  controlfina-db:
+      container_name: controlfina-db
+      image: "postgres:17.0-alpine3.20"
+      restart: always            
+      volumes:
+        - controlfinadb-vol:/var/lib/postgresql/data
+      environment: 
+        POSTGRESQL_HOST: controlfina-db
+        POSTGRESQL_USER: postegre
+        POSTGRESQL_PASSWORD: xpto123
+        POSTGRESQL_DB: controlfinadb
+        POSTGRES_HOST_AUTH_METHOD: trust
+      ports:
+        - 54322:5432
