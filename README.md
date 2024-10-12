@@ -7,6 +7,6 @@ Além disso, faço o uso parcial do **UnitOfWork Pattern** facilita a gestão de
 Também faço uso do **Result Pattern** para padronizar o retorno de operações, e claro, as **extensions** 
 que são úteis para estender funcionalidades de maneira limpa e reutilizável.
 
-#Como executar a aplicação?
+**Como executar a aplicação?**
 
 A aplicação já esta configurada para rodar no docker, então basta ter instalado o docker em sua máquina.
