@@ -5,7 +5,6 @@ using ControlFinaApi.Features.Transactions.Contracts.Responses;
 using ControlFinaApi.Features.Transactions.Mappings;
 using ControlFinaApi.Extensions;
 using ControlFinaApi.Features.Transactions.Repositories.Queries;
-using ControlFinaApi.Utils;
 using ControlFinaApi.Messages;
 using ControlFinaApi.Features.Histories.Repositories.Queries;
 using ControlFinaApi.Features.Transactions.Validators;
@@ -32,7 +31,7 @@ namespace ControlFinaApi.Features.Transactions.Services
         {
             var validator = new CreateTransactionValidator();
             var resultErros = validator.Validate(request);
-            var errors = ValidateErros.GetErros(resultErros);
+            var errors = resultErros.GetErrors();
 
             if (errors.Any())
                 return Result<TransactionResponse>.Failure(errors);
@@ -59,7 +58,7 @@ namespace ControlFinaApi.Features.Transactions.Services
         {
             var validator = new UpdateTransactionValidator();
             var resultErros = validator.Validate(request);
-            var errors = ValidateErros.GetErros(resultErros);
+            var errors = resultErros.GetErrors();
 
             if (errors.Any())
                 return Result<TransactionResponse>.Failure(errors);

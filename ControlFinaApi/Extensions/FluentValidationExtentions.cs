@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 
 namespace ControlFinaApi.Extensions
 {
@@ -14,6 +15,20 @@ namespace ControlFinaApi.Extensions
             return ruleBuilder.Must(IsNullOrEmpty);
         }
 
+        public static IEnumerable<string> GetErrors(this ValidationResult validationResult)
+        {
+            if (validationResult is not null)
+            {
+                if (!validationResult.IsValid)
+                {
+                    foreach (var error in validationResult.Errors)
+                    {
+                        yield return error.ErrorMessage;
+
+                    }
+                }
+            }
+        }
         private static bool IsNullOrEmpty(string input)
         {
             return !string.IsNullOrEmpty(input.Trim());

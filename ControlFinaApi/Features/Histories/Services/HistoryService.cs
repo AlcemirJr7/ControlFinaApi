@@ -7,6 +7,7 @@ using ControlFinaApi.Messages;
 using ControlFinaApi.Features.Histories.Contracts.Responses;
 using ControlFinaApi.Features.Histories.Repositories.Queries;
 using ControlFinaApi.Features.Histories.Validators;
+using ControlFinaApi.Extensions;
 
 namespace ControlFinaApi.Features.Histories.Services
 {
@@ -25,7 +26,7 @@ namespace ControlFinaApi.Features.Histories.Services
         {
             var validator = new CreateHistoryValidator();
             var resultErros = validator.Validate(request);
-            var errors = ValidateErros.GetErros(resultErros);
+            var errors = resultErros.GetErrors();
 
             if (errors.Any())
                 return Result<HistoryResponse>.Failure(errors);
@@ -48,7 +49,7 @@ namespace ControlFinaApi.Features.Histories.Services
         {
             var validator = new UpdateHistoryValidator();
             var resultErros = validator.Validate(request);
-            var errors = ValidateErros.GetErros(resultErros);
+            var errors = resultErros.GetErrors();
 
             if (errors.Any())
                 return Result<HistoryResponse>.Failure(errors);
