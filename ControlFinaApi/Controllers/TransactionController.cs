@@ -4,19 +4,19 @@ using ControlFinaApi.Features.Transactions.Contracts.Requests;
 using ControlFinaApi.Features.Transactions.Contracts.Responses;
 using ControlFinaApi.Features.Transactions.Services;
 using ControlFinaApi.Features;
+using ControlFinaApi.Abstractions;
 
 namespace ControlFinaApi.Controllers
 {
     [ApiVersion("1.0")]
     [ApiController]
     [Route("Api/v{version:apiVersion}/[controller]")]
-    [Produces("application/json")]
-    public class TransactionController : ControllerBase
+    public class TransactionController : AbstractController
     {
-        private readonly ITransactionService _transacaoService;
+        private readonly ITransactionService _service;
         public TransactionController(ITransactionService transacaoService)
         {
-            _transacaoService = transacaoService;
+            _service = transacaoService;
         }
 
         /// <summary>
@@ -27,18 +27,10 @@ namespace ControlFinaApi.Controllers
         [HttpPost("Create")]
         [ProducesResponseType(typeof(Result<TransactionResponse>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(Result<TransactionResponse>), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Result<TransactionResponse>>> Create(CreateTransactionRequest request)
+        public async Task<IActionResult> Create(CreateTransactionRequest request)
         {
-
-            var result = await _transacaoService.CreateAsync(request);
-
-            if (!result.IsSuccess)
-            {
-                return BadRequest(result);
-            }
-
-            return CreatedAtAction(nameof(GetById), new { id = result.Content?.Id }, result);
-
+            var result = await _service.CreateAsync(request);
+            return HandleResponse(result);
         }
 
         /// <summary>
@@ -49,17 +41,10 @@ namespace ControlFinaApi.Controllers
         [HttpPut("Update")]
         [ProducesResponseType(typeof(Result<TransactionResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Result<TransactionResponse>), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Result<TransactionResponse>>> Update(UpdateTransactionRequest request)
+        public async Task<IActionResult> Update(UpdateTransactionRequest request)
         {
-
-            var result = await _transacaoService.UpdateAsync(request);
-
-            if (!result.IsSuccess)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result);
+            var result = await _service.UpdateAsync(request);
+            return HandleResponse(result);
         }
 
         /// <summary>
@@ -70,17 +55,10 @@ namespace ControlFinaApi.Controllers
         [HttpDelete("Delete/{id}")]
         [ProducesResponseType(typeof(Result<TransactionResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Result<TransactionResponse>), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Result<TransactionResponse>>> Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-
-            var result = await _transacaoService.DeleteAsync(id);
-
-            if (!result.IsSuccess)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result);
+            var result = await _service.DeleteAsync(id);
+            return HandleResponse(result);
         }
 
         /// <summary>
@@ -90,16 +68,10 @@ namespace ControlFinaApi.Controllers
         [HttpGet("GetAll")]
         [ProducesResponseType(typeof(Result<TransactionResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Result<TransactionResponse>), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Result<IEnumerable<TransactionResponse>>>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var result = await _transacaoService.GetAllAsync();
-
-            if (!result.IsSuccess)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result);
+            var result = await _service.GetAllAsync();
+            return HandleResponse(result);
         }
 
         /// <summary>
@@ -110,17 +82,10 @@ namespace ControlFinaApi.Controllers
         [ProducesResponseType(typeof(Result<TransactionResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Result<TransactionResponse>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Result<TransactionResponse>), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Result<IEnumerable<TransactionResponse>>>> GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            var result = await _transacaoService.GetByIdAsync(id);
-
-            if (!result.IsSuccess)
-                return BadRequest(result);
-
-            if (result.Content is null)
-                return NotFound(result);
-
-            return Ok(result);
+            var result = await _service.GetByIdAsync(id);
+            return HandleResponse(result);
         }
     }
 }

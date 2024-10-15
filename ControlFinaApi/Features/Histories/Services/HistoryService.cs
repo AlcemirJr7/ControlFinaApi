@@ -2,7 +2,6 @@
 using ControlFinaApi.Entities;
 using ControlFinaApi.Features.Histories.Mappings;
 using ControlFinaApi.Features.Histories.Repositories.Commands;
-using ControlFinaApi.Utils;
 using ControlFinaApi.Messages;
 using ControlFinaApi.Features.Histories.Contracts.Responses;
 using ControlFinaApi.Features.Histories.Repositories.Queries;
