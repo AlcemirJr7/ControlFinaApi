@@ -30,11 +30,10 @@ namespace ControlFinaApi.Features.Transactions.Services
         public async Task<Result<TransactionResponse>> CreateAsync(CreateTransactionRequest request)
         {
             var validator = new CreateTransactionValidator();
-            var resultErros = validator.Validate(request);
-            var errors = resultErros.GetErrors();
-
-            if (errors.Any())
-                return Result<TransactionResponse>.Failure(errors);
+            var resultValidator = validator.Validate(request);
+            
+            if (!resultValidator.IsValid)
+                return Result<TransactionResponse>.Failure(resultValidator.GetErrors());
 
             History? history = await _historicoQuery.GetByIdAsync(request.HistoryId);
 
@@ -57,11 +56,10 @@ namespace ControlFinaApi.Features.Transactions.Services
         public async Task<Result<TransactionResponse>> UpdateAsync(UpdateTransactionRequest request)
         {
             var validator = new UpdateTransactionValidator();
-            var resultErros = validator.Validate(request);
-            var errors = resultErros.GetErrors();
+            var resultValidator = validator.Validate(request);
 
-            if (errors.Any())
-                return Result<TransactionResponse>.Failure(errors);
+            if (!resultValidator.IsValid)
+                return Result<TransactionResponse>.Failure(resultValidator.GetErrors());
 
             History? history = await _historicoQuery.GetByIdAsync(request.HistoryId);
 

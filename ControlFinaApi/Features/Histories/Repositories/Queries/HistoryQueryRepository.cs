@@ -15,8 +15,9 @@ namespace ControlFinaApi.Features.Histories.Repositories.Queries
         public async Task<IEnumerable<History>?> GetAllAsync()
         {
             IEnumerable<History>? histories = await _context.Histories
-                                                              .AsNoTracking()
-                                                              .ToListAsync();
+                                                            .AsNoTracking()
+                                                            .OrderBy(h => h.Description)
+                                                            .ToListAsync();
 
             return histories;
         }

@@ -12,6 +12,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8077:8077
+      - 8078:8078
     depends_on:
       - controlfina-db
   

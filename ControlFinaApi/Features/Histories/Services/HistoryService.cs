@@ -24,11 +24,10 @@ namespace ControlFinaApi.Features.Histories.Services
         public async Task<Result<HistoryResponse>> CreateAsync(CreateHistoryRequest request)
         {
             var validator = new CreateHistoryValidator();
-            var resultErros = validator.Validate(request);
-            var errors = resultErros.GetErrors();
-
-            if (errors.Any())
-                return Result<HistoryResponse>.Failure(errors);
+            var resultValidator = validator.Validate(request);
+            
+            if (!resultValidator.IsValid)
+                return Result<HistoryResponse>.Failure(resultValidator.GetErrors());
 
             History history = new(request.Description, request.Type);
 
@@ -47,11 +46,10 @@ namespace ControlFinaApi.Features.Histories.Services
         public async Task<Result<HistoryResponse>> UpdateAsync(UpdateHistoryRequest request)
         {
             var validator = new UpdateHistoryValidator();
-            var resultErros = validator.Validate(request);
-            var errors = resultErros.GetErrors();
+            var resultValidator = validator.Validate(request);
 
-            if (errors.Any())
-                return Result<HistoryResponse>.Failure(errors);
+            if (!resultValidator.IsValid)
+                return Result<HistoryResponse>.Failure(resultValidator.GetErrors());
 
             History? history = await _query.GetByIdAsync(request.Id);
 
